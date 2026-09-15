@@ -15,7 +15,7 @@ let colorController = {
         return res.send({
           status: false,
           error: {
-            name: "color name already exist...",
+            "name":"color name already exist.."
           },
         });
       }
@@ -122,6 +122,15 @@ let colorController = {
       message: "Color Status Changed",
     });
   },
+  getDetails:async(req,res)=>{
+    let {id}=req.params;
+    let data=await colorModel.findOne({_id:id}) 
+    res.send({
+      status: true,
+      message: "Color View",
+      data,
+    });
+  }
 };
 
 module.exports = colorController;

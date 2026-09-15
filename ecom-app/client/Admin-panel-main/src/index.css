@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+body { margin: 0; background: #f8fafc; color: #1e293b; font-family: Arial, sans-serif; }
+.admin-page { min-height: 100vh; padding: 34px 22px; }
+.admin-title { border-radius: 8px 8px 0 0; background: #f1f5f9; padding: 14px 20px; color: #172033; font-size: 22px; font-weight: 600; border: 1px solid #94a3b8; }
+.admin-form { display: grid; gap: 22px; border: 1px solid #ddd; border-top: 0; border-radius: 0 0 7px 7px; background: white; padding: 25px; }
+.admin-form label { display: block; margin-bottom: 8px; font-weight: 600; }
+.admin-submit, .admin-list-title button { width: fit-content; border: 0; border-radius: 9px; background: #2354df; padding: 12px 24px; color: white; cursor: pointer; font-size: 15px; font-weight: 600; }
+.admin-list-title { display: flex; align-items: center; justify-content: space-between; border: 1px solid #94a3b8; border-radius: 8px 8px 0 0; background: #f1f5f9; padding: 14px 18px; font-size: 23px; font-weight: 600; }
+.admin-list-title > div { display: flex; gap: 10px; }
+.admin-list-title > div button:first-child { order: 1; width: 50px; overflow: hidden; border: 0; background: #2354df; color: transparent; font-size: 0; }
+.admin-list-title > div button:first-child::before { content: "▼"; color: white; font-size: 18px; }
+.admin-list-title > div button:nth-child(2) { order: 3; background: #c91d23; }
+.admin-list-title > div button:nth-child(3) { order: 2; background: #14863f; }
+.admin-table { overflow-x: auto; border: 1px solid #94a3b8; border-top: 0; border-radius: 0 0 8px 8px; background: white; }
+.admin-row { display: grid; grid-template-columns: 80px 75px repeat(5, minmax(145px, 1fr)); min-width: 950px; border-bottom: 1px solid #e5e7eb; }
+.admin-row > div { display: flex; min-height: 68px; align-items: center; justify-content: center; padding: 14px 10px; text-align: center; font-weight: 400; }
+.admin-head { background: #f8fafc; font-size: 13px; font-weight: 700; text-transform: uppercase; }
+.admin-head > div { min-height: 58px; font-weight: 700; }
+.admin-row:not(.admin-head) > div:last-child svg { box-sizing: content-box; margin: auto; border-radius: 999px; background: #2354df; padding: 14px; color: white; font-size: 17px; }
+.admin-row .active { min-height: auto; margin: auto; border-radius: 10px; background: #22c967; padding: 10px 22px; color: white; font-weight: 600; }
+.sidebar { position: sticky; top: 0; display: none; width: 100%; height: 100vh; overflow-y: auto; background: #f8fafc; padding: 7px 10px 30px; color: #111827; border-right: 1px solid #e5e7eb; }
+.sidebar-logo { display: flex; height: 122px; align-items: center; justify-content: center; padding: 12px 18px; }
+.sidebar-logo-image { display: block; width: 220px; max-width: 100%; height: auto; }
+.sidebar-divider { height: 1px; margin: 0 0 24px; background: #94a3b8; }
+.sidebar-menu { padding: 0 9px; }
+.sidebar-main-link, .sidebar summary { display: flex; min-height: 52px; cursor: pointer; list-style: none; align-items: center; gap: 17px; padding: 10px 0; color: #071126; font-size: 19px; font-weight: 600; text-decoration: none; }
+.sidebar-main-link > svg, .sidebar summary > svg:first-child { width: 23px; color: #6b7280; font-size: 23px; }
+.sidebar summary::-webkit-details-marker { display: none; }
+.sidebar summary span { flex: 1; white-space: nowrap; }
+.sidebar-arrow { width: 12px !important; color: #64748b !important; font-size: 12px !important; transition: transform .2s; }
+.sidebar details[open] .sidebar-arrow { transform: rotate(180deg); }
+.sidebar details > div { margin: -2px 0 5px 0; padding: 0; }
+.sidebar-sub-link { display: flex; align-items: center; gap: 18px; min-height: 43px; padding: 7px 0; color: #071126; font-size: 17px; font-weight: 600; text-decoration: none; }
+.sidebar-sub-link svg { width: 17px; color: #778195; font-size: 14px; }
+.sidebar-sub-link:hover, .sidebar-sub-active { color: #159bd7; }
+.sidebar-sub-active svg { color: #159bd7; }
+@media (min-width: 1024px) { .sidebar { display: block; } }
+
+/* Professional styling shared by every explicit div-based View page. */
+section.w-full > .p-4 > .bg-slate-100 {
+  border-color: #94a3b8;
+  background: #f1f5f9;
+  padding: 14px 22px;
+}
+section.w-full > .p-4 > .bg-slate-100 > div:first-child {
+  color: #172033;
+  font-size: 23px;
+  font-weight: 600;
+}
+section.w-full > .p-4 > .bg-slate-100 > .flex { gap: 14px; }
+section.w-full > .p-4 > .bg-slate-100 > .flex > button {
+  margin: 0;
+  border: 0;
+  border-radius: 9px;
+  padding: 12px 24px;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: none;
+}
+section.w-full > .p-4 > .bg-slate-100 > .flex > button:first-child {
+  order: 1;
+  width: 50px;
+  height: 50px;
+  justify-content: center;
+  overflow: hidden;
+  background: #2354df;
+  padding: 0;
+  color: transparent;
+  font-size: 0;
+}
+section.w-full > .p-4 > .bg-slate-100 > .flex > button:first-child svg {
+  color: white;
+  font-size: 20px;
+}
+section.w-full > .p-4 > .bg-slate-100 > .flex > button:nth-child(2) {
+  order: 3;
+  background: #c91d23;
+}
+section.w-full > .p-4 > .bg-slate-100 > .flex > button:nth-child(3) {
+  order: 2;
+  background: #14863f;
+}
+section.w-full > .p-4 > .border.border-t-0 {
+  border-color: #94a3b8;
+}
+section.w-full .grid.bg-gray-50 > div {
+  display: flex;
+  min-height: 60px;
+  align-items: center;
+  justify-content: center;
+  color: #172033;
+  font-weight: 700;
+}
+section.w-full .grid.bg-white > div {
+  display: flex;
+  min-height: 78px;
+  align-items: center;
+  justify-content: center;
+  color: #536078;
+  font-weight: 400;
+}
+section.w-full .grid.bg-white > div.text-green-600,
+section.w-full .grid.bg-white > div.text-red-600 {
+  align-self: center;
+  min-height: auto;
+  margin: auto;
+  border-radius: 10px;
+  padding: 10px 20px;
+  color: white;
+  font-weight: 600;
+}
+section.w-full .grid.bg-white > div.text-green-600 { background: #22c967; }
+section.w-full .grid.bg-white > div.text-red-600 { background: linear-gradient(90deg, #ff6b73, #ed2028); }
+section.w-full .grid.bg-white > div:last-child svg {
+  box-sizing: content-box;
+  border-radius: 999px;
+  background: #2354df;
+  padding: 14px;
+  color: white;
+  font-size: 17px;
+}

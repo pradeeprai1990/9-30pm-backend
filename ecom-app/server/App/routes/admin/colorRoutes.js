@@ -7,7 +7,7 @@ let colorRoute = express.Router();
 colorRoute.post("/create", colorController.create);
 ////http://localhost:8000/admin/color/view
 colorRoute.get("/view", colorController.view);
-
+colorRoute.get("/details/:id", colorController.getDetails);
 ////http://localhost:8000/admin/color/delete
 colorRoute.post("/delete", colorController.delete);
 ////http://localhost:8000/admin/color/update
