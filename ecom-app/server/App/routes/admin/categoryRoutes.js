@@ -27,4 +27,6 @@ let uploads=multer({storage:storage})
 ////http://localhost:8000/admin/category/create
 categoryRoute.post("/create", uploads.single('image')   ,categoryController.create );
 
+categoryRoute.get('/view',categoryController.view)
+
 module.exports=categoryRoute

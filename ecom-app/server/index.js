@@ -8,6 +8,10 @@ let App=express()
 App.use(cors())
 App.use(express.json())
 
+App.use("/uploads/category",express.static("uploads/category"))
+App.use("/uploads/subcategory",express.static("uploads/subcategory"))
+App.use("/uploads/subsubcategory",express.static("uploads/subsubcategory"))
+
 
 // console.log(process.env.TOKEN); //12345
 

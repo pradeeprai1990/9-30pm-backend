@@ -45,10 +45,13 @@ let categoryController = {
 
   },
   view: async (req, res) => {
-    let data = await colorModel.find();
+
+    path=process.env.CATEGORYPATH
+    let data = await categoryModel.find();
     res.send({
       status: true,
-      message: "Color View",
+      path,
+      message: "Category View",
       data,
     });
   },
