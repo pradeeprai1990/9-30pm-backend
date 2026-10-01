@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaCloudArrowUp } from 'react-icons/fa6'
+import { useParams } from 'react-router';
 
 function NoPreview({ text = 'Click to upload image' }) {
   return (
@@ -14,12 +15,21 @@ function NoPreview({ text = 'Click to upload image' }) {
 
 export default function AddProduct() {
 
+
+   let [editData,setEditData]=useState(null)
+   
+
   let apiBaseUrl = import.meta.env.VITE_APIBASEPATH;
   let [parentCategory, setParentCategory] = useState([]);
   let [subCategoryData, setsubCategoryData] = useState([]);
   let [subsubCategoryData, setsubsubCategoryData] = useState([]);
   let [materialData, setMaterialData] = useState([]);
   let [colorData, setColorData] = useState([]);
+
+  // //parentID
+  //  let [parentID, setParentId] = useState(null);
+  // //SubparentID
+  //  let [subparentID, setsubParentId] = useState(null);
 
   let [imagePreview, setImagePreview] = useState('');
   let [backImagePreview, setBackImagePreview] = useState('');
@@ -72,7 +82,30 @@ export default function AddProduct() {
   };
 
 
-  let getMaterial = (event) => {
+  let editgetSubCategory = (parentID) => {
+   
+    axios
+      .get(`${apiBaseUrl}product/sub-category/${parentID}`)
+      .then((res) => res.data)
+      .then((finalRes) => {
+        setsubCategoryData(finalRes.data);
+      });
+  };
+
+
+  let editgetSubsubCategory = (subCatId) => {
+   
+    axios
+      .get(`${apiBaseUrl}product/sub-sub-category/${subCatId}`)
+      .then((res) => res.data)
+      .then((finalRes) => {
+        setsubsubCategoryData(finalRes.data);
+      });
+  };
+
+
+
+  let getMaterial = () => {
 
     axios
       .get(`${apiBaseUrl}product/material`)
@@ -82,7 +115,7 @@ export default function AddProduct() {
       });
   };
 
-  let getColors = (event) => {
+  let getColors = () => {
 
     axios
       .get(`${apiBaseUrl}product/colors`)
@@ -119,12 +152,61 @@ export default function AddProduct() {
   };
 
 
+  let {id}=useParams()
+
+  useEffect(()=>{
+
+    if(id){
+        axios.get(`${apiBaseUrl}product/details/${id}`)
+        .then((res)=>res.data)
+        .then((finalRes)=>{
+         setEditData(finalRes.data);
+
+         editgetSubCategory(finalRes.data.parent._id)
+
+         editgetSubsubCategory(finalRes.data.subCategory._id)
+          
+         console.log('====================================');
+         setImagePreview(finalRes.path+finalRes.data.image);
+         setBackImagePreview(finalRes.path+finalRes.data.backImage);
+          
+
+         let galleryPaths= finalRes.data.gallery.map((imageName)=>finalRes.path+imageName)
+          setGalleryPreview(galleryPaths)
+    
+
+
+        })
+      }
+      else{
+        setEditData(null)
+        setImagePreview('')
+        setBackImagePreview('')
+        setGalleryPreview([])
+      }
+
+  },[id])
+
+
+  
+
 
   useEffect(() => {
     getParents()
     getColors()
     getMaterial()
   }, [])
+
+
+  // useEffect(()=>{
+  //     if(parentID){
+  //         getSubCategory()
+  //     }
+  // },[parentID,subparentID])
+
+
+
+
 
 
   const inputClass = 'block w-full rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100'
@@ -184,7 +266,9 @@ export default function AddProduct() {
           <div className='grid content-start grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2 lg:col-span-2'>
             <div>
               <label htmlFor='product_name' className={labelClass}>Product Name</label>
-              <input id='product_name' name='name' type='text' autoComplete='off' className={inputClass} placeholder='Product Name' />
+              <input id='product_name'
+                defaultValue={editData?.name}
+              name='name' type='text' autoComplete='off' className={inputClass} placeholder='Product Name' />
             </div>
             <div>
               <label htmlFor='parent' className={labelClass}>Select Parent Category</label>
@@ -193,7 +277,9 @@ export default function AddProduct() {
                 id='parent' name='parent' defaultValue='' className={inputClass}>
                 <option value=''>Nothing Selected</option>
                 {parentCategory.map((parent, index) => {
-                  return <option value={parent._id}>{parent.name}</option>;
+                  return <option
+                  selected={editData?.parent._id==parent._id}
+                  value={parent._id}>{parent.name}</option>;
                 })}
               </select>
             </div>
@@ -204,7 +290,7 @@ export default function AddProduct() {
                 id='subCategory' name='subCategory' defaultValue='' className={inputClass}>
                 <option value=''>Nothing Selected</option>
                 {subCategoryData.map((obj, index) => {
-                  return <option value={obj._id}>{obj.name}</option>;
+                  return <option   selected={editData?.subCategory._id==obj._id}  value={obj._id}>{obj.name}</option>;
                 })}
               </select>
             </div>
@@ -213,7 +299,7 @@ export default function AddProduct() {
               <select id='subSubCategory' name='subSubCategory' defaultValue='' className={inputClass}>
                 <option value=''>Nothing Selected</option>
                 {subsubCategoryData.map((obj, index) => {
-                  return <option value={obj._id}>{obj.name}</option>;
+                  return <option  selected={editData?.subSubCategory._id==obj._id} value={obj._id}>{obj.name}</option>;
                 })}
               </select>
             </div>
@@ -222,7 +308,15 @@ export default function AddProduct() {
               <select id='material' multiple name='material[]' defaultValue='' className={inputClass}>
                 <option value=''>Nothing Selected</option>
                 {materialData.map((obj, index) => {
-                  return <option value={obj._id}>{obj.name}</option>;
+                  return <option
+                   selected={ 
+
+                    editData?.material.find((editObj)=>editObj._id==obj._id) ? true : false 
+                  
+                  
+                  }
+                  
+                  value={obj._id}>{obj.name}</option>;
                 })}
               </select>
             </div>
@@ -230,8 +324,16 @@ export default function AddProduct() {
               <label htmlFor='color' className={labelClass}>Select Color</label>
               <select id='color' multiple name='color[]' defaultValue='' className={inputClass}>
                 <option value=''>Nothing Selected</option>
+
+              
+
                 {colorData.map((obj, index) => {
-                  return <option value={obj._id}>{obj.name}</option>;
+                  return <option  selected={ 
+
+                    editData?.color.find((editObj)=>editObj._id==obj._id) ? true : false 
+                  
+                  
+                  } value={obj._id}>{obj.name}</option>;
                 })}
               </select>
             </div>
@@ -239,41 +341,55 @@ export default function AddProduct() {
               <label htmlFor='productType' className={labelClass}>Select Product Type</label>
               <select id='productType' name='productType' defaultValue='' className={inputClass}>
                 <option value=''>Nothing Selected</option>
-                <option value='Featured'>Featured</option>
-                <option value='New Arrivals'>New Arrivals</option>
-                <option value='Onsale'>Onsale</option>
+                <option value='Featured' selected={editData?.productType=="Featured"}>Featured</option>
+                <option value='New Arrivals' selected={editData?.productType=="New Arrivals"}>New Arrivals</option>
+                <option value='Onsale' selected={editData?.productType=="Onsale"}>Onsale</option>
               </select>
             </div>
             <div>
               <label htmlFor='bestSelling' className={labelClass}>Is Best Selling</label>
               <select id='bestSelling' name='bestSelling' defaultValue='' className={inputClass}>
                 <option value=''>Nothing Selected</option>
-                <option value='true'>Yes</option>
-                <option value='false'>No</option>
+                <option value='true' selected={editData?.bestSelling==true ? true : false}>Yes</option>
+                <option value='false' selected={editData?.bestSelling==false ? true : false}>No</option>
               </select>
             </div>
 
             <div>
               <label htmlFor='actualPrice' className={labelClass}>Actual Price</label>
-              <input id='actualPrice' name='actualPrice' type='number' min='0' step='0.01' className={inputClass} placeholder='Actual Price' />
+              <input id='actualPrice'
+              defaultValue={editData?.actualPrice}
+              
+              name='actualPrice' type='number' min='0' step='0.01' className={inputClass} placeholder='Actual Price' />
             </div>
             <div>
               <label htmlFor='salePrice' className={labelClass}>Sale Price</label>
-              <input id='salePrice' name='salePrice' type='number' min='0' step='0.01' className={inputClass} placeholder='Sale Price' />
+              <input id='salePrice' 
+               defaultValue={editData?.salePrice}
+              name='salePrice' type='number' min='0' step='0.01' className={inputClass} placeholder='Sale Price' />
             </div>
             <div>
               <label htmlFor='stocks' className={labelClass}>Total In Stocks</label>
-              <input id='stocks' name='stocks' type='number' min='0' className={inputClass} placeholder='Total In Stocks' />
+              <input id='stocks'
+                defaultValue={editData?.stocks}
+              
+              name='stocks' type='number' min='0' className={inputClass} placeholder='Total In Stocks' />
             </div>
             <div>
               <label htmlFor='order' className={labelClass}>Order</label>
-              <input id='order' name='order' type='number' min='0' className={inputClass} placeholder='Order' />
+              <input id='order' 
+                 defaultValue={editData?.order}
+              
+              
+              name='order' type='number' min='0' className={inputClass} placeholder='Order' />
             </div>
           </div>
 
           <div className='lg:col-span-3'>
             <label htmlFor='description' className={labelClass}>Description</label>
-            <textarea id='description' name='description' className={`${inputClass} min-h-36 resize-y`} />
+            <textarea
+              defaultValue={editData?.description}
+            id='description' name='description' className={`${inputClass} min-h-36 resize-y`} />
           </div>
 
           <div className='lg:col-span-3'>

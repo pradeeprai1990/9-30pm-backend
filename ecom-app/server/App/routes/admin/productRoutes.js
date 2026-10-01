@@ -32,7 +32,8 @@ productRoute.post('/create', uploads.fields(
         }
     ]
 ), productController.create)
-
+productRoute.get('/view', productController.view)
+productRoute.get('/details/:id', productController.details)
 productRoute.get('/parent', productController.parent)
 productRoute.get('/sub-category/:parentId', productController.subCategory)
 productRoute.get('/sub-sub-category/:subcatId', productController.subsubCategory)

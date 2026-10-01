@@ -1,75 +1,13 @@
-import { useState } from 'react'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { FaEye, FaFilter, FaPenToSquare, FaXmark } from 'react-icons/fa6'
+import { Link } from 'react-router'
 
 // Sample data shaped like the product model (populated refs) until the view API is ready
-const sampleProducts = [
-  {
-    _id: '1',
-    name: 'Berlin Rattan Bed',
-    parent: { name: 'Furniture' },
-    subCategory: { name: 'Bedroom' },
-    subSubCategory: { name: 'Beds' },
-    material: [{ name: 'Rattan' }, { name: 'Teak Wood' }],
-    color: [{ name: 'Brown', code: '#8B5A2B' }, { name: 'Beige', code: '#D9C3A0' }],
-    productType: 'Featured',
-    bestSelling: true,
-    actualPrice: 7500,
-    salePrice: 6200,
-    stocks: 12,
-    order: 1,
-    description: 'Handwoven rattan bed with a solid teak frame and a breathable headboard.',
-    image: 'https://placehold.co/400x400?text=Front',
-    backImage: 'https://placehold.co/400x400?text=Back',
-    gallery: ['https://placehold.co/400x400?text=G1', 'https://placehold.co/400x400?text=G2'],
-    status: true,
-    date: '2026-09-20T10:00:00.000Z',
-  },
-  {
-    _id: '2',
-    name: 'Ambre Vintage Bed',
-    parent: { name: 'Furniture' },
-    subCategory: { name: 'Bedroom' },
-    subSubCategory: { name: 'Beds' },
-    material: [{ name: 'Sheesham Wood' }],
-    color: [{ name: 'Walnut', code: '#5C4033' }],
-    productType: 'New Arrivals',
-    bestSelling: false,
-    actualPrice: 6000,
-    salePrice: 5400,
-    stocks: 0,
-    order: 2,
-    description: 'Vintage-style bed with carved posts and an antique walnut finish.',
-    image: 'https://placehold.co/400x400?text=Front',
-    backImage: 'https://placehold.co/400x400?text=Back',
-    gallery: [],
-    status: false,
-    date: '2026-09-22T10:00:00.000Z',
-  },
-  {
-    _id: '3',
-    name: 'Bohemian Carved Bed',
-    parent: { name: 'Furniture' },
-    subCategory: { name: 'Bedroom' },
-    subSubCategory: { name: 'Beds' },
-    material: [{ name: 'Mango Wood' }],
-    color: [{ name: 'Natural', code: '#C8A165' }, { name: 'White', code: '#FFFFFF' }],
-    productType: 'Onsale',
-    bestSelling: true,
-    actualPrice: 5800,
-    salePrice: 4900,
-    stocks: 5,
-    order: 3,
-    description: 'Hand-carved bohemian bed made from mango wood.',
-    image: 'https://placehold.co/400x400?text=Front',
-    backImage: '',
-    gallery: ['https://placehold.co/400x400?text=G1'],
-    status: true,
-    date: '2026-09-25T10:00:00.000Z',
-  },
-]
+
 
 export default function ViewProducts() {
-  const [data] = useState(sampleProducts)
+
   const [ids, setIds] = useState([])
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [showFilter, setShowFilter] = useState(false)
@@ -82,6 +20,26 @@ export default function ViewProducts() {
   const handleSelectAll = (event) => {
     setIds(event.target.checked ? data.map((product) => product._id) : [])
   }
+
+ let [data, setData] = useState([]);
+  let [path, setPath] = useState("");
+  let apiBaseUrl = import.meta.env.VITE_APIBASEPATH;
+
+  let getProduct = () => {
+    axios
+      .get(`${apiBaseUrl}product/view`)
+      .then((res) => res.data)
+      .then((finalRes) => {
+        setData(finalRes.data);
+        setPath(finalRes.path);
+      });
+  };
+
+  useEffect(() => {
+    getProduct();
+  }, []);
+
+
 
   return (
     <section className='w-full'>
@@ -153,7 +111,7 @@ export default function ViewProducts() {
                     <td className='px-3 py-3'>{index + 1}</td>
                     <td className='px-3 py-3'>
                       {product.image
-                        ? <img src={product.image} alt={product.name} className='w-12 h-12 object-cover rounded-md border mx-auto' />
+                        ? <img src={path+product.image} alt={product.name} className='w-12 h-12 object-cover rounded-md border mx-auto' />
                         : '-'}
                     </td>
                     <td className='px-3 py-3 text-left font-medium text-gray-900'>
@@ -188,7 +146,9 @@ export default function ViewProducts() {
                           <FaEye />
                         </button>
                         <button type='button' title='Edit'>
-                          <FaPenToSquare className='text-[gold] text-lg' />
+                          <Link to={`/product/edit/${product._id}`}>
+                              <FaPenToSquare className='text-[gold] text-lg' />
+                          </Link>
                         </button>
                       </div>
                     </td>
@@ -214,8 +174,8 @@ export default function ViewProducts() {
 
             <div className='overflow-y-auto p-5'>
               <div className='flex gap-5 mb-5'>
-                <img src={selectedProduct.image} alt='Front' className='w-32 h-32 object-cover rounded-md border' />
-                {selectedProduct.backImage && <img src={selectedProduct.backImage} alt='Back' className='w-32 h-32 object-cover rounded-md border' />}
+                <img src={path+selectedProduct.image} alt='Front' className='w-32 h-32 object-cover rounded-md border' />
+                {path+selectedProduct.backImage && <img src={path+selectedProduct.backImage} alt='Back' className='w-32 h-32 object-cover rounded-md border' />}
                 <div>
                   <h3 className='text-xl font-semibold'>{selectedProduct.name}</h3>
                   <p className='mt-2'>
@@ -263,7 +223,7 @@ export default function ViewProducts() {
                   <p className='font-semibold text-gray-600 text-sm mb-2'>Gallery</p>
                   <div className='flex flex-wrap gap-3'>
                     {selectedProduct.gallery.map((image, index) => (
-                      <img key={index} src={image} alt='' className='w-20 h-20 object-cover rounded-md border' />
+                      <img key={index} src={path+image} alt='' className='w-20 h-20 object-cover rounded-md border' />
                     ))}
                   </div>
                 </div>

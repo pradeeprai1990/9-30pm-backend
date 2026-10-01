@@ -50,8 +50,15 @@ function App() {
                     <Route path='/sub-category/view' element={<ViewSubCategories />} />
                     <Route path='/sub-sub-category/add' element={<AddSubSubCategory />} />
                     <Route path='/sub-sub-category/view' element={<ViewSubSubCategories />} />
+
+
                     <Route path='/product/add' element={<AddProduct />} />
                     <Route path='/product/view' element={<ViewProducts />} />
+                     <Route path='/product/edit/:id' element={<AddProduct />} />   
+
+
+
+
                     <Route path='/users/add' element={<AddUser />} />
                     <Route path='/users/view' element={<ViewUsers />} />
                     <Route path='/enquiries/add' element={<AddEnquiry />} />
