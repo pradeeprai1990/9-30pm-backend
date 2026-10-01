@@ -3,15 +3,17 @@ let faqSchema=mongoose.Schema(
     {
         question:{
             type:String,
-            required:[true,"faq name is required"],
+            required:[true,"faq question is required"],
+            minLength:[2,"faq question must be at least 2 characters"],
+            maxLength:[500,"faq question must be at most 500 characters"]
         }, 
         answer:{
-            type:Object,
-            required:[true,"code  is required"],   
+            type:String,
+            required:[true,"faq answer is required"],
         },
         order:{
             type:Number,
-            required:[true,"code  is required"],   
+            required:[true,"order is required"],
         },
         status:{
             type:Boolean,
@@ -26,4 +28,3 @@ let faqSchema=mongoose.Schema(
 )
 let faqModel=mongoose.model("faq",faqSchema)
 module.exports=faqModel
-

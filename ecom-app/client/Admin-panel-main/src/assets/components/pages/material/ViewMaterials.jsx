@@ -1,6 +1,72 @@
+import axios from 'axios'
+import iziToast from 'izitoast'
+import { useEffect, useState } from 'react'
 import { FaFilter, FaPenToSquare } from 'react-icons/fa6'
+import { Link } from 'react-router'
 
 export default function ViewMaterials() {
+  const [data, setData] = useState([])
+  const [ids, setIds] = useState([])
+  const apiBaseUrl = import.meta.env.VITE_APIBASEPATH
+
+  const getMaterials = () => {
+    axios
+      .get(`${apiBaseUrl}material/view`)
+      .then((response) => response.data)
+      .then((result) => setData(result.data ?? []))
+  }
+
+  useEffect(() => {
+    getMaterials()
+  }, [])
+
+  const handleCheck = (event) => {
+    const { checked, value } = event.target
+    setIds((currentIds) =>
+      checked ? [...new Set([...currentIds, value])] : currentIds.filter((id) => id !== value),
+    )
+  }
+
+  const handleSelectAll = (event) => {
+    setIds(event.target.checked ? data.map((material) => material._id) : [])
+  }
+
+  const handleBulkAction = (action) => {
+    if (ids.length === 0) {
+      iziToast.error({
+        title: 'Error',
+        message: `Please select at least one material to ${action === 'delete' ? 'delete' : 'change status'}`,
+        position: 'topRight',
+      })
+      return
+    }
+
+    const request = action === 'delete'
+      ? axios.post(`${apiBaseUrl}material/delete`, { ids })
+      : axios.post(`${apiBaseUrl}material/change-status`, { ids })
+
+    request
+      .then((response) => response.data)
+      .then((result) => {
+        if (result.status) {
+          iziToast.show({
+            title: 'Success',
+            message: result.message,
+            position: 'topRight',
+            color: 'green',
+          })
+          getMaterials()
+          setIds([])
+        } else {
+          iziToast.error({
+            title: 'Error',
+            message: result.error?.name ?? `Unable to ${action} materials`,
+            position: 'topRight',
+          })
+        }
+      })
+  }
+
   return (
     <section className='w-full'>
       <nav className='flex border-b bg-white px-6 py-3 shadow-sm'>
@@ -30,56 +96,32 @@ export default function ViewMaterials() {
           <div className='text-[26px] font-semibold'>View Material</div>
           <div className='flex gap-3 items-center'>
             <button type='button' className='flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm border border-slate-300 transition-all'><FaFilter /> Filter</button>
-            <button className='text-white disabled:bg-slate-400 bg-indigo-600 hover:bg-indigo-700 text-sm px-5 py-2.5 rounded-lg shadow-sm transition-all'>Delete All</button>
-            <button className='text-white disabled:bg-slate-400 bg-indigo-600 hover:bg-indigo-700 text-sm px-5 py-2.5 rounded-lg shadow-sm transition-all'>Change Status</button>
+            <button type='button' onClick={() => handleBulkAction('delete')} className='text-white disabled:bg-slate-400 bg-red-700 hover:bg-red-800 text-sm px-5 py-2.5 rounded-lg shadow-sm transition-all'>Delete</button>
+            <button type='button' onClick={() => handleBulkAction('status')} className='text-white disabled:bg-slate-400 bg-green-700 hover:bg-green-800 text-sm px-5 py-2.5 rounded-lg shadow-sm transition-all'>Change Status</button>
           </div>
         </div>
 
         <div className='border border-t-0 rounded-b-md border-slate-300 overflow-x-auto'>
           <div className='min-w-[900px] text-center'>
             <div className='grid grid-cols-[100px_70px_repeat(4,minmax(120px,1fr))_100px_100px] text-sm uppercase bg-gray-50 border-b text-gray-700'>
-              <div className='px-2 py-3 font-semibold flex items-center justify-center gap-2'><input type='checkbox' className='w-4 h-4 cursor-pointer' />Select</div>
+              <div className='px-2 py-3 font-semibold flex items-center justify-center gap-2'><input type='checkbox' onChange={handleSelectAll} checked={data.length > 0 && ids.length === data.length} className='w-4 h-4 cursor-pointer' />Select</div>
               <div className='px-2 py-3 font-semibold'>S. No.</div>
               <div className='px-2 py-3 font-semibold'>Material Name</div>
-              <div className='px-2 py-3 font-semibold'>Finish</div>
-              <div className='px-2 py-3 font-semibold'>Products</div>
               <div className='px-2 py-3 font-semibold'>Order</div>
               <div className='px-2 py-3 font-semibold'>Status</div>
               <div className='px-2 py-3 font-semibold'>Action</div>
             </div>
 
-            <div className='grid grid-cols-[100px_70px_repeat(4,minmax(120px,1fr))_100px_100px] bg-white border-b text-gray-700'>
-              <div className='px-2 py-4'><input type='checkbox' className='material-row-check w-4 h-4 cursor-pointer' /></div>
-              <div className='px-2 py-4'>1</div>
-              <div className='px-2 py-4'>Sheesham Wood</div>
-              <div className='px-2 py-4'>Natural</div>
-              <div className='px-2 py-4'>26</div>
-              <div className='px-2 py-4'>1</div>
-              <div className='px-2 py-4 font-semibold text-green-600'>Active</div>
-              <div className='px-2 py-4'><FaPenToSquare className='text-[gold] text-xl' /></div>
-            </div>
-
-            <div className='grid grid-cols-[100px_70px_repeat(4,minmax(120px,1fr))_100px_100px] bg-white border-b text-gray-700'>
-              <div className='px-2 py-4'><input type='checkbox' className='material-row-check w-4 h-4 cursor-pointer' /></div>
-              <div className='px-2 py-4'>2</div>
-              <div className='px-2 py-4'>Rattan</div>
-              <div className='px-2 py-4'>Cane weave</div>
-              <div className='px-2 py-4'>14</div>
-              <div className='px-2 py-4'>2</div>
-              <div className='px-2 py-4 font-semibold text-red-600 font-bold'>Inactive</div>
-              <div className='px-2 py-4'><FaPenToSquare className='text-[gold] text-xl' /></div>
-            </div>
-
-            <div className='grid grid-cols-[100px_70px_repeat(4,minmax(120px,1fr))_100px_100px] bg-white border-b text-gray-700'>
-              <div className='px-2 py-4'><input type='checkbox' className='material-row-check w-4 h-4 cursor-pointer' /></div>
-              <div className='px-2 py-4'>3</div>
-              <div className='px-2 py-4'>Leather</div>
-              <div className='px-2 py-4'>Matte</div>
-              <div className='px-2 py-4'>8</div>
-              <div className='px-2 py-4'>3</div>
-              <div className='px-2 py-4 font-semibold text-green-600'>Active</div>
-              <div className='px-2 py-4'><FaPenToSquare className='text-[gold] text-xl' /></div>
-            </div>
+            {data.map((material, index) => (
+              <div key={material._id} className='grid grid-cols-[100px_70px_repeat(2,minmax(120px,1fr))_100px_100px] bg-white border-b text-gray-700'>
+                <div className='px-2 py-4'><input type='checkbox' value={material._id} checked={ids.includes(material._id)} onChange={handleCheck} className='material-row-check w-4 h-4 cursor-pointer' /></div>
+                <div className='px-2 py-4'>{index + 1}</div>
+                <div className='px-2 py-4'>{material.name}</div>
+                <div className='px-2 py-4'>{material.order}</div>
+                <div className={`px-2 py-4 font-semibold ${material.status ? 'text-green-600' : 'text-red-600'}`}>{material.status ? 'Active' : 'Deactive'}</div>
+                <div className='px-2 py-4'><Link to={`/material/edit/${material._id}`}><FaPenToSquare className='text-[gold] text-xl' /></Link></div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

@@ -5,7 +5,12 @@ const checkToken = require("../../middleware/checkToken")
 const categoryRoute = require("./categoryRoutes")
 const subcategoryRoute = require("./subCategoryRoutes")
 const subSubcategoryRoute = require("./subsubCategoryRoutes")
-// const sliderRoutes = require("./sliderRoutes")
+const sliderRoutes = require("./sliderRoutes")
+const countryRoutes = require("./countryRoutes")
+const testimonialRoutes = require("./testimonialRoutes")
+const faqRoutes = require("./faqRoutes")
+const whyChooseUsRoutes = require("./whyChooseUsRoutes")
+const productRoute = require("./productRoutes")
 
 let adminRoutes=express.Router() //Api Create 
 
@@ -16,7 +21,12 @@ adminRoutes.use("/color",colorRoute)
 adminRoutes.use("/material",materialRoute)
 
 
-// adminRoutes.use("/slider",sliderRoutes)
+adminRoutes.use("/why-choose-us", whyChooseUsRoutes)
+
+adminRoutes.use("/slider", sliderRoutes)
+adminRoutes.use("/country", countryRoutes)
+adminRoutes.use("/testimonial", testimonialRoutes)
+adminRoutes.use("/faqs", faqRoutes)
 
 adminRoutes.use("/category",categoryRoute)
 
@@ -25,6 +35,8 @@ adminRoutes.use("/subcategory",subcategoryRoute)
 
 
 adminRoutes.use("/subsubcategory",subSubcategoryRoute)
+
+adminRoutes.use("/product",productRoute)
 
 
 

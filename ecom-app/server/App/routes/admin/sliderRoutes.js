@@ -1,15 +1,26 @@
-let express=require("express");
-const { sliderCreate, sliderView, sliderDelete, sliderUpdate } = require("../../controllers/admin/sliderController");
-let sliderRoutes=express.Router()
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
+const multer = require("multer");
+const sliderController = require("../../controllers/admin/sliderController");
+const sliderRoutes = express.Router();
 
-////http://localhost:8000/admin/slider/create
-sliderRoute.post("/create",sliderCreate );
-////http://localhost:8000/admin/slider/view
-sliderRoute.get("/view", sliderView);
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    const destination = path.join(process.cwd(), "uploads", "slider");
+    fs.mkdir(destination, { recursive: true }, (err) => callback(err, destination));
+  },
+  filename: (req, file, callback) => {
+    callback(null, `${Date.now()}${path.extname(file.originalname).toLowerCase()}`);
+  },
+});
+const uploads = multer({ storage });
 
-////http://localhost:8000/admin/slider/delete
-sliderRoute.delete("/delete",sliderDelete );
-////http://localhost:8000/admin/slider/update
-sliderRoute.put("/update", sliderUpdate);
+sliderRoutes.post("/create", uploads.single("image"), sliderController.create);
+sliderRoutes.get("/view", sliderController.view);
+sliderRoutes.get("/details/:id", sliderController.getDetails);
+sliderRoutes.post("/delete", sliderController.delete);
+sliderRoutes.put("/update/:id", uploads.single("image"), sliderController.update);
+sliderRoutes.post("/change-status", sliderController.changeStatus);
 
 module.exports = sliderRoutes;

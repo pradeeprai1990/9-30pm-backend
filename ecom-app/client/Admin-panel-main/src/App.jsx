@@ -42,6 +42,7 @@ function App() {
 
 
                     <Route path='/material/add' element={<AddMaterial />} />
+                    <Route path='/material/edit/:id' element={<AddMaterial />} />
                     <Route path='/material/view' element={<ViewMaterials />} />
                     <Route path='/category/add' element={<AddCategory />} />
                     <Route path='/category/view' element={<ViewCategories />} />
