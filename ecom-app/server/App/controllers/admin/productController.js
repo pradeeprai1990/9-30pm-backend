@@ -64,7 +64,7 @@ let productController = {
 
     },
     view: async (req, res) => {
-        let path=process.env.PRODUCTPATH
+        let path = process.env.PRODUCTPATH
         let data = await
             productModel.find()
                 .populate('parent', 'name')
@@ -79,11 +79,11 @@ let productController = {
             data,
         });
     },
-     details: async (req, res) => {
-        let {id}=req.params;
-        let path=process.env.PRODUCTPATH
+    details: async (req, res) => {
+        let { id } = req.params;
+        let path = process.env.PRODUCTPATH
         let data = await
-            productModel.findOne({_id:id})
+            productModel.findOne({ _id: id })
                 .populate('parent', 'name')
                 .populate('subCategory', 'name')
                 .populate('subSubCategory', 'name')

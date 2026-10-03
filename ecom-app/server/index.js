@@ -3,6 +3,7 @@ let mongoose=require("mongoose")
 let cors=require("cors")
 require("dotenv").config() //
 const adminRoutes = require("./App/routes/admin/adminRoutes");
+const webRoutes = require("./App/routes/web/webRoutes");
 // const checkToken = require("./App/middleware/checkToken");
 let App=express()
 App.use(cors())
@@ -24,6 +25,7 @@ App.use("/uploads/product",express.static("uploads/product"))
 
 App.use("/admin",adminRoutes) //adminRoutes Call
 
+App.use("/web",webRoutes) //Website API Routes Call
 
 //Server Connect + DB Name Create
 
