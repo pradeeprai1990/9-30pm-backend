@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400..900&family=Rubik:wght@300..900&display=swap');
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #212121;
+  --primary-color: #c09578;
+  --dark-gray: #5A5A5A;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono); 
+}
+
+@theme{
+  --font-rubik: "Rubik", sans-serif;
+  --font-playfair: "Playfair Display", serif;
+  --color-orange-dim: var(--primary-color);
+  --color-dark-gray: var(--dark-gray);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff;
+    --foreground: #212121;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--color-foreground);
+  font-family: "Rubik", sans-serif;
+  border-color: #ebebeb;
+}
+.swiper-pagination-bullet.swiper-pagination-bullet-active{
+  background: #c09578 !important;
+  width: 12px !important;
+  height: 12px !important;
+}
+.swiper-pagination-bullet{
+  width: 10px !important;
+  height: 10px !important;
+}
+.home-banner .swiper-pagination-bullet{
+  background: #fff;
+  opacity: 0.7;
+}
+
