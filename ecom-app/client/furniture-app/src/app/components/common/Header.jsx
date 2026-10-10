@@ -3,6 +3,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { IoIosSearch } from "react-icons/io";
 import { FaHeart } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { clearCredentials } from "@/redux/authSlice";
+import { redirect } from "next/navigation";
 
 const menuItems = [
   {
@@ -82,7 +85,13 @@ export default function Header() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenu,setOpenMenu] = useState(null);
-
+  let token= useSelector((allStore)=>allStore.auth.token)
+  let dispatch=useDispatch()
+  let logOut=()=>{
+      dispatch(clearCredentials())
+      redirect('/login')
+  }
+  
   return (
     <header className="z-50 bg-white/95 border-b-1 border-gray-200">
       {/* Top Bar */}
@@ -93,8 +102,20 @@ export default function Header() {
           </p>
           <div className="flex items-center gap-4">
             <span className={`flex items-center gap-1 text-[12px] font-rubik`}>
-              <Link href={"/login"}>Login</Link>/
-              <Link href={"/register"}>Register</Link>
+             {
+              token ? 
+              <>
+                <button onClick={logOut}>Logout</button>
+                |
+                <button>MyProfile</button>
+              </>
+              :
+              <>
+                 <Link href={"/login"}>Login</Link>/
+                <Link href={"/register"}>Register</Link>
+              </>
+             }
+             
             </span>
           </div>
         </div>

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { useDispatch } from 'react-redux'
 import { setCredentials } from '@/redux/authSlice'
 import axios from 'axios'
@@ -12,7 +12,7 @@ export default function LoginForm() {
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   let apiBaseUrl = process.env.NEXT_PUBLIC_APIBASEURL
-
+  let Dispatch=  useDispatch()
   const handleSubmit = async (event) => {
 
     setIsSubmitting(true)
@@ -27,6 +27,8 @@ export default function LoginForm() {
       if(finalRes.status){
         setError('')
         console.log(finalRes);
+        Dispatch(setCredentials({token:finalRes.token}))
+        redirect('/dashboard')
         
       }
       else{
