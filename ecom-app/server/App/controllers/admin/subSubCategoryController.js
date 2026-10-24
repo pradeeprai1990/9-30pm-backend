@@ -1,3 +1,4 @@
+const slugify = require("slugify");
 const categoryModel = require("../../models/categoryModel");
 const subcategoryModel = require("../../models/subCategoryModel");
 const subSubcategoryModel = require("../../models/subSubCategoryModel");
@@ -5,6 +6,7 @@ const subSubcategoryModel = require("../../models/subSubCategoryModel");
 let subSubCategoryController = {
   create: async (req, res) => {
     let inserObj = { ...req.body }; //name,parent,subCategory,order
+    inserObj["slug"] = slugify(inserObj.name || "", { lower: true, strict: true });
     try {
       let checksubSubCategory = await subSubcategoryModel.findOne({
         name: inserObj.name,

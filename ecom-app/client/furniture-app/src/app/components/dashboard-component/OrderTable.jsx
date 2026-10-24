@@ -1,21 +1,8 @@
 import React from 'react'
+import Link from 'next/link'
+import { orders, formatDate, orderNumber } from '../Data/orders-data'
 
 export default function OrderTable() {
-    let orders = [
-        {
-            orderid: 1,
-            date: 'May 10, 2025',
-            status: 'Completed',
-            total: 'Rs. 25.00 for 1 item',
-        },
-        {
-            orderid: 2,
-            date: 'May 10, 2026',
-            status: 'Processing',
-            total: 'Rs. 25.00 for 1 item',
-        }
-    ]
-
   return (
     <div>
         <table className="w-full border-collapse bg-white shadow rounded">
@@ -31,15 +18,17 @@ export default function OrderTable() {
 
             <tbody>
             {orders.map((item) => (
-                <tr key={item.orderid} className="text-center border-gray-100 text-sm">
-                <td className="border border-gray-100 p-2">{item.orderid}</td>
-                <td className="border border-gray-100 p-2 font-semibold">{item.date}</td>
-                <td className="border border-gray-100 p-2 font-semibold">{item.status}</td>
-                <td className="border border-gray-100 p-2 font-semibold">{item.total}</td>
+                <tr key={item._id} className="text-center border-gray-100 text-sm">
+                <td className="border border-gray-100 p-2">{orderNumber(item._id)}</td>
+                <td className="border border-gray-100 p-2 font-semibold">{formatDate(item.createdAt)}</td>
+                <td className="border border-gray-100 p-2 font-semibold capitalize">{item.orderStatus}</td>
+                <td className="border border-gray-100 p-2 font-semibold">
+                    Rs. {item.totalAmount} for {item.orderItems.length} {item.orderItems.length === 1 ? "item" : "items"}
+                </td>
                 <td className="border border-gray-100 p-2">
-                    <button className="px-4 py-2 rounded text-orange-dim font-semibold">
+                    <Link href={`/orders/${item._id}`} className="px-4 py-2 rounded text-orange-dim font-semibold">
                         View
-                    </button>
+                    </Link>
                 </td>
                 </tr>
             ))}

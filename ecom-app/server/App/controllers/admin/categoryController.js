@@ -1,3 +1,4 @@
+const slugify = require("slugify");
 const categoryModel = require("../../models/categoryModel");
 
 let categoryController = {
@@ -17,6 +18,7 @@ let categoryController = {
       }
       let insertOBj = {
         name,
+        slug: slugify(name || "", { lower: true, strict: true }),
         order,
       };
       if (req.file) {

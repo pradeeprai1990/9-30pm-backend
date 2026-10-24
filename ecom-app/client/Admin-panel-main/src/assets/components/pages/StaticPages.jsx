@@ -54,22 +54,7 @@ export function ViewOrders() {
   </div></div>
 }
 
-export function AddSlider() {
-  return <div className='admin-page'><div className='admin-title'>Add Slider</div><div className='admin-form'>
-    <div id='slider-title'><label>Slider Title</label><input className={inputClass} type='text' placeholder='Enter slider title' /></div>
-    <div id='slider-image'><label>Slider Image</label><input className={inputClass} type='file' /></div>
-    <div id='slider-link'><label>Slider Link</label><input className={inputClass} type='text' placeholder='Enter slider link' /></div>
-    <div id='slider-order'><label>Order</label><input className={inputClass} type='number' placeholder='Enter order' /></div>
-    <button className='admin-submit'>Add Slider</button>
-  </div></div>
-}
 
-export function ViewSliders() {
-  return <div className='admin-page'><div className='admin-list-title'><span>View Sliders</span><div><button>Filter</button><button>Delete All</button><button>Change Status</button></div></div><div className='admin-table'>
-    <div className='admin-row admin-head'><div>Select</div><div>S. No.</div><div>Title</div><div>Image</div><div>Order</div><div>Status</div><div>Action</div></div>
-    <div id='slider-row-1' className='admin-row'><div><input type='checkbox' /></div><div>1</div><div>Summer Collection</div><div>slider-1.jpg</div><div>1</div><div className='active'>Active</div><div><FaPenToSquare /></div></div>
-  </div></div>
-}
 
 export function AddCountry() {
   return <div className='admin-page'><div className='admin-title'>Add Country</div><div className='admin-form'>

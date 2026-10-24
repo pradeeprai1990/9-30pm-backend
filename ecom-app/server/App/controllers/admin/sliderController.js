@@ -26,7 +26,7 @@ let sliderController = {
       let data = await sliderModel.find();
       res.send({
         status: true,
-        path: "/uploads/slider/",
+        path: process.env.SLIDERPATH,
         message: "Slider View",
         data,
       });

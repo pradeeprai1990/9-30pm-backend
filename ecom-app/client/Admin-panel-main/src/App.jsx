@@ -19,9 +19,11 @@ import AddSubSubCategory from './assets/components/pages/subSubCategory/AddSubSu
 import ViewSubSubCategories from './assets/components/pages/subSubCategory/ViewSubSubCategories'
 import AddProduct from './assets/components/pages/product/AddProduct'
 import ViewProducts from './assets/components/pages/product/ViewProducts'
+import AddSlider from './assets/components/pages/slider/AddSlider'
+import ViewSliders from './assets/components/pages/slider/ViewSliders'
 import {
-  AddCountry, AddEnquiry, AddFaq, AddOrder, AddSlider, AddTerms, AddUser,
-  ViewCountries, ViewEnquiries, ViewFaqs, ViewOrders, ViewSliders, ViewTerms, ViewUsers
+  AddCountry, AddEnquiry, AddFaq, AddOrder, AddTerms, AddUser,
+  ViewCountries, ViewEnquiries, ViewFaqs, ViewOrders, ViewTerms, ViewUsers
 } from './assets/components/pages/StaticPages'
 
 function App() {

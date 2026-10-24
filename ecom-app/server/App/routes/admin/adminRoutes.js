@@ -11,6 +11,7 @@ const testimonialRoutes = require("./testimonialRoutes")
 const faqRoutes = require("./faqRoutes")
 const whyChooseUsRoutes = require("./whyChooseUsRoutes")
 const productRoute = require("./productRoutes")
+const dashboardRoutes = require("./dashboardRoutes")
 
 let adminRoutes=express.Router() //Api Create 
 
@@ -37,6 +38,9 @@ adminRoutes.use("/subcategory",subcategoryRoute)
 adminRoutes.use("/subsubcategory",subSubcategoryRoute)
 
 adminRoutes.use("/product",productRoute)
+
+//http://localhost:8000/admin/dashboard/stats
+adminRoutes.use("/dashboard",dashboardRoutes)
 
 
 

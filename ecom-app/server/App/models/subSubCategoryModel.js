@@ -8,6 +8,7 @@ let subSubcategorySchema=mongoose.Schema(
             minLength:[2,"Category Name Must Be Atleast 2 Character"],
             maxLength:[100,"Category Name Must Be Atmost 100 Character"]
         }, 
+        slug:String,
         parent:{
             type:mongoose.Schema.Types.ObjectId,  //6aac21343bfe66e4e4e6c1bd
              ref: 'category',

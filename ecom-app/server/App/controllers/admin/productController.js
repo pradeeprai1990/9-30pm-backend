@@ -1,3 +1,4 @@
+const slugify = require("slugify");
 const categoryModel = require("../../models/categoryModel");
 const colorModel = require("../../models/colorModel");
 const materialModel = require("../../models/materialModel");
@@ -9,6 +10,7 @@ let productController = {
     create: async (req, res) => {
 
         let insertObj = { ...req.body }
+        insertObj['slug'] = slugify(insertObj.name || "", { lower: true, strict: true })
 
         if (req.files.image) {
             insertObj['image'] = req.files.image[0].filename

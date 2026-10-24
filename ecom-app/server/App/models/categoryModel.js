@@ -8,6 +8,7 @@ let categorySchema=mongoose.Schema(
             minLength:[2,"Category Name Must Be Atleast 2 Character"],
             maxLength:[100,"Category Name Must Be Atmost 100 Character"]
         }, 
+        slug:String,
         image:String, //Image name
         order:{
             type:Number,
@@ -23,8 +24,19 @@ let categorySchema=mongoose.Schema(
             default:Date.now
         }
 
+    },
+    {
+        toJSON:{virtuals:true},
+        toObject:{virtuals:true}
     }
 )
+
+//Virtual Column -> category ki sub categories (subcategory.parent == category._id)
+categorySchema.virtual("subCategories",{
+    ref:"subcategory",
+    localField:"_id",
+    foreignField:"parent"
+})
 
 let categoryModel=mongoose.model("category",categorySchema)
 module.exports=categoryModel
